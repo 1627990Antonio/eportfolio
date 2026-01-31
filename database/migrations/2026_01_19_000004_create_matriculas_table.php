@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('matriculas', function (Blueprint $table) {
             $table->id();
             $table->foreignId('estudiante_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('modulo_formativo_id')->constrained('modulos_formativos')->onDelete('cascade');
+            //$table->foreignId('modulo_formativo_id')->constrained('modulos_formativos')->onDelete('cascade');
             $table->timestamps();
         });
     }

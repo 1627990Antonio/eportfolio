@@ -7,13 +7,16 @@ use Tqdev\PhpCrudApi\Api;
 use Tqdev\PhpCrudApi\Config\Config;
 use App\Http\Controllers\API\ComentariosController;
 use App\Http\Controllers\API\AsignacionesController;
+use App\Http\Controllers\API\CicloFormativoController;
 use App\Http\Controllers\API\CriteriosTareasController;
 use App\Http\Controllers\API\EvaluacionEvidenciaController;
 use App\Http\Controllers\API\EvidenciaController;
 use App\Http\Controllers\API\TareasController;
 use App\Http\Controllers\API\CriterioEvaluacionController;
+use App\Http\Controllers\API\FamiliaProfesionalController;
 use App\Http\Controllers\API\MatriculasController;
 use App\Http\Controllers\API\ResultadoAprendizajeController;
+use App\Models\CicloFormativo;
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
@@ -21,6 +24,19 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
 // Rutas PHP-CRUD-API
 Route::prefix('v1')->group(function () {
+    // ------------------------------------------------
+    // FAMILIAS PROFESIONALES
+    Route::apiResource('familias-profesionales', FamiliaProfesionalController::class)->parameters([
+        'familias-profesionales' => 'familiaProfesional'
+    ]);
+
+    // ------------------------------------------------
+    // CICLOS FORMATIVOS
+    Route::apiResource('familias-profesionales.ciclos-formativos', CicloFormativoController::class)->parameters([
+        'familias-profesionales' => 'familiaProfesional',
+        'ciclos-formativos' => 'cicloFormativo'
+    ]);
+
     // ------------------------------------------------
     // COMENTARIOS
     Route::apiResource('evidencias.comentarios', ComentariosController::class);
@@ -32,7 +48,7 @@ Route::prefix('v1')->group(function () {
     // ------------------------------------------------
     // USER-ASIGNACIONES
     Route::get('users/{user_id}/asignaciones-revision', [AsignacionesController::class, 'asignacionUsuarios']);
-    
+
     // --------------------------------------------------
     // TAREAS
     Route::apiResource('tareas', TareasController::class)->only('store', 'update', 'destroy');
@@ -53,7 +69,7 @@ Route::prefix('v1')->group(function () {
     Route::apiResource('evidencias.evaluaciones-evidencias', EvaluacionEvidenciaController::class)->parameters([
         'evaluaciones-evidencias' => 'evaluacionEvidencia'
     ]);
-  
+
     // --------------------------------------------------
     // MATRICULAS
     Route::apiResource('modulos-formativos.matriculas', MatriculasController::class)->parameters([
