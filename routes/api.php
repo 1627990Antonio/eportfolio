@@ -15,6 +15,7 @@ use App\Http\Controllers\API\TareasController;
 use App\Http\Controllers\API\CriterioEvaluacionController;
 use App\Http\Controllers\API\FamiliaProfesionalController;
 use App\Http\Controllers\API\MatriculasController;
+use App\Http\Controllers\API\ModuloFormativoController;
 use App\Http\Controllers\API\ResultadoAprendizajeController;
 use App\Models\CicloFormativo;
 
@@ -35,6 +36,13 @@ Route::prefix('v1')->group(function () {
     Route::apiResource('familias-profesionales.ciclos-formativos', CicloFormativoController::class)->parameters([
         'familias-profesionales' => 'familiaProfesional',
         'ciclos-formativos' => 'cicloFormativo'
+    ]);
+
+    // ------------------------------------------------
+    // MODULOS FORMATIVOS
+    Route::apiResource('ciclos-formativos.modulos-formativos', ModuloFormativoController::class)->parameters([
+        'ciclos-formativos' => 'cicloFormativo',
+        'modulos-formativos' => 'moduloFormativo'
     ]);
 
     // ------------------------------------------------
