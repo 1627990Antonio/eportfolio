@@ -39,6 +39,7 @@ class CicloFormativoController extends Controller
      */
     public function show(FamiliaProfesional $familiaProfesional, CicloFormativo $cicloFormativo)
     {
+        abort_if($cicloFormativo->familia_profesional_id !== $familiaProfesional->id, 404);
         return new CicloFormativoResource($cicloFormativo);
     }
 
@@ -47,6 +48,7 @@ class CicloFormativoController extends Controller
      */
     public function update(Request $request, FamiliaProfesional $familiaProfesional, CicloFormativo $cicloFormativo)
     {
+        abort_if($cicloFormativo->familia_profesional_id !== $familiaProfesional->id, 404);
         $cicloFormativoDato = json_decode($request->getContent(), true);
         $cicloFormativo->update($cicloFormativoDato);
 
@@ -58,6 +60,7 @@ class CicloFormativoController extends Controller
      */
     public function destroy(FamiliaProfesional $familiaProfesional, CicloFormativo $cicloFormativo)
     {
+        abort_if($cicloFormativo->familia_profesional_id !== $familiaProfesional->id, 404);
         try {
             $cicloFormativo->delete();
             return response()->json(null, 204);

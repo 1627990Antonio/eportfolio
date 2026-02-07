@@ -8,5 +8,5 @@ class CicloFormativo extends Model
 {
     protected $table = 'ciclos_formativos';
 
-    protected $fillable = ['nombre', 'codigo', 'grado', 'descripcion'];
+    protected $fillable = ['familia_profesional_id', 'nombre', 'codigo', 'grado', 'descripcion'];
 }

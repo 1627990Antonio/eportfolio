@@ -32,7 +32,7 @@ class CiclosFormativosTableSeeder extends Seeder
         $this->command->info('¡Tabla de CICLOS FORMATIVOS inicializada con datos!');
     }
 
-    private static $ciclos = array(
+    public static $ciclos = array(
         array('codFamilia' => 'ADG', 'grado' => 'medio', 'codCiclo' => 'ACEC2', 'nombre' => 'Técnico en Actividades Ecuestres'),
         array('codFamilia' => 'ADG', 'grado' => 'superior', 'codCiclo' => 'ACFI3', 'nombre' => 'Técnico Superior en Acondicionamiento Físico'),
         array('codFamilia' => 'ADG', 'grado' => 'básico', 'codCiclo' => 'ACID1', 'nombre' => 'Profesional Básico en Acceso y Conservación en Instalaciones Deportivas'),
