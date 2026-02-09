@@ -17,26 +17,35 @@ use App\Http\Controllers\API\FamiliaProfesionalController;
 use App\Http\Controllers\API\MatriculasController;
 use App\Http\Controllers\API\ModuloFormativoController;
 use App\Http\Controllers\API\ResultadoAprendizajeController;
-use App\Models\CicloFormativo;
+use App\Http\Controllers\API\TokenController;
 
-Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 // Rutas PHP-CRUD-API
 Route::prefix('v1')->group(function () {
-    // ------------------------------------------------
-    // FAMILIAS PROFESIONALES
-    Route::apiResource('familias-profesionales', FamiliaProfesionalController::class)->parameters([
-        'familias-profesionales' => 'familiaProfesional'
-    ]);
 
-    // ------------------------------------------------
-    // CICLOS FORMATIVOS
-    Route::apiResource('familias-profesionales.ciclos-formativos', CicloFormativoController::class)->parameters([
-        'familias-profesionales' => 'familiaProfesional',
-        'ciclos-formativos' => 'cicloFormativo'
-    ]);
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/user', function (Request $request) {
+            $user = $request->user();
+            $user->fullName = $user->nombre . ' ' . $user->apellidos;
+            return $user;
+        });
+
+        // ------------------------------------------------
+        // FAMILIAS PROFESIONALES
+        Route::apiResource('familias-profesionales', FamiliaProfesionalController::class)->parameters([
+            'familias-profesionales' => 'familiaProfesional'
+        ]);
+
+        // ------------------------------------------------
+        // CICLOS FORMATIVOS
+        Route::apiResource('familias-profesionales.ciclos-formativos', CicloFormativoController::class)->parameters([
+            'familias-profesionales' => 'familiaProfesional',
+            'ciclos-formativos' => 'cicloFormativo'
+        ]);
+    });
 
     // ------------------------------------------------
     // MODULOS FORMATIVOS
@@ -95,6 +104,11 @@ Route::prefix('v1')->group(function () {
     Route::apiResource('resultados-aprendizaje.criterios-evaluacion', CriterioEvaluacionController::class)->parameters([
         'resultados-aprendizaje' => 'resultadoAprendizaje'
     ]);
+
+    // emite un nuevo token
+    Route::post('tokens', [TokenController::class, 'store']);
+    // elimina el token del usuario autenticado
+    Route::delete('tokens', [TokenController::class, 'destroy'])->middleware('auth:sanctum');
 });
 
 Route::any('/{any}', function (ServerRequestInterface $request) {
@@ -112,8 +126,6 @@ Route::any('/{any}', function (ServerRequestInterface $request) {
         $records = json_decode($response->getBody()->getContents())->records;
         $response = response()->json($records, 200, $headers = ['X-Total-Count' => count($records)]);
     } catch (\Throwable $th) {
-
     }
     return $response;
-
 })->where('any', '.*');

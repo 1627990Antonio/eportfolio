@@ -15,6 +15,7 @@ class CiclosFormativosTableSeeder extends Seeder
     {
         DB::table('ciclos_formativos')->truncate();
 
+        \App\Models\CicloFormativo::factory(10)->create();
         // Obtenemos los códigos de las familias profesionales para relacionar el ID
         $familias = FamiliasProfesionalesTableSeeder::$familiaProfesional;
         $codigosFamilias = array_column($familias, 'codigo');

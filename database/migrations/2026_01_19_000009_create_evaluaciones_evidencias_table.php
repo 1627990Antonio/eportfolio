@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('evaluaciones-evidencias', function (Blueprint $table) {
-            $table->id()->primary();
+        Schema::create('evaluaciones_evidencias', function (Blueprint $table) {
+            $table->id();
 
             $table->unsignedBigInteger('evidencia_id');
             $table->foreign('evidencia_id')->references('id')->on('evidencias')->onDelete('cascade'); //evidencias (tabla)
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('evaluaciones-evidencias');
+        Schema::dropIfExists('evaluaciones_evidencias');
     }
 };

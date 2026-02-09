@@ -15,10 +15,13 @@ class FamiliasProfesionalesTableSeeder extends Seeder
     public function run(): void
     {
         FamiliaProfesional::truncate();
+
+        \App\Models\FamiliaProfesional::factory(10)->create();
         foreach (self::$familiaProfesional as $familia) {
             FamiliaProfesional::insert([
                 'codigo' => $familia['codigo'],
                 'nombre' => $familia['nombre'],
+                'descripcion' => $familia['descripcion'],
             ]);
         }
         $this->command->info('¡Tabla familias_profesionales inicializada con datos!');

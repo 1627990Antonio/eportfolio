@@ -15,7 +15,7 @@ return new class extends Migration
         //$table->foreign('estudiante_id')->references('id')->on('users')->onDelete('cascade');
 
         Schema::create('comentarios', function (Blueprint $table) {
-            $table->id()->primary();
+            $table->id();
             $table->unsignedBigInteger('evidencia_id');
             $table->foreign('evidencia_id')->references('id')->on('evidencias')->onDelete('cascade'); //evidencias (tabla)
             $table->unsignedBigInteger('user_id');
