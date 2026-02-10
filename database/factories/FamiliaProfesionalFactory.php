@@ -17,9 +17,9 @@ class FamiliaProfesionalFactory extends Factory
     public function definition(): array
     {
         return [
-            'nombre'=>$this->faker->word(),
-            'codigo'=>$this->faker->unique()->word(),
-            'descripcion'=>$this->faker->sentence(),
+            'nombre'=>$this->faker->word(3, true),
+            'codigo'=>$this->faker->unique()->regexify('[A-Z]{3}[0-9]{3}'),
+            'descripcion'=>$this->faker->paragraph(),
         ];
     }
 }

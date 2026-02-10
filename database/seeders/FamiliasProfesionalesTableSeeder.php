@@ -16,7 +16,8 @@ class FamiliasProfesionalesTableSeeder extends Seeder
     {
         FamiliaProfesional::truncate();
 
-        \App\Models\FamiliaProfesional::factory(10)->create();
+        FamiliaProfesional::factory(10)->create();
+
         foreach (self::$familiaProfesional as $familia) {
             FamiliaProfesional::insert([
                 'codigo' => $familia['codigo'],

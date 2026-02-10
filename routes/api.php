@@ -32,20 +32,18 @@ Route::prefix('v1')->group(function () {
             $user->fullName = $user->nombre . ' ' . $user->apellidos;
             return $user;
         });
-
-        // ------------------------------------------------
-        // FAMILIAS PROFESIONALES
-        Route::apiResource('familias-profesionales', FamiliaProfesionalController::class)->parameters([
-            'familias-profesionales' => 'familiaProfesional'
-        ]);
-
-        // ------------------------------------------------
-        // CICLOS FORMATIVOS
-        Route::apiResource('familias-profesionales.ciclos-formativos', CicloFormativoController::class)->parameters([
-            'familias-profesionales' => 'familiaProfesional',
-            'ciclos-formativos' => 'cicloFormativo'
-        ]);
     });
+    // ------------------------------------------------
+    // FAMILIAS PROFESIONALES
+    Route::apiResource('familias-profesionales', FamiliaProfesionalController::class)->parameters([
+        'familias-profesionales' => 'familiaProfesional'
+    ]);
+    // ------------------------------------------------
+    // CICLOS FORMATIVOS
+    Route::apiResource('familias-profesionales.ciclos-formativos', CicloFormativoController::class)->parameters([
+        'familias-profesionales' => 'familiaProfesional',
+        'ciclos-formativos' => 'cicloFormativo'
+    ]);
 
     // ------------------------------------------------
     // MODULOS FORMATIVOS
