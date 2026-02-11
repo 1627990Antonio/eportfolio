@@ -14,9 +14,15 @@ class FamiliaProfesionalController extends Controller
      */
     public function index(Request $request)
     {
-         return FamiliaProfesionalResource::collection(
-            FamiliaProfesional::orderBy($request->sort ?? 'id', $request->order ?? 'asc')
-            ->paginate($request->per_page));
+        $query = FamiliaProfesional::query()->where('id', $request->id);
+        if($query){
+            $query->orWhere('nombre', 'like', '%' . $request->search . '%');
+        }
+
+        return FamiliaProfesionalResource::collection(
+            $query->orderBy($request->sort ?? 'id', $request->order ?? 'asc')
+            ->paginate($request->per_page)
+        );
     }
 
     /**
@@ -24,9 +30,13 @@ class FamiliaProfesionalController extends Controller
      */
     public function store(Request $request)
     {
-        $familiaProfesional = json_decode($request->getContent(), true);
+        $validate_Data = $request->validate([
+            'nombre' => 'required',
+            'codigo' => 'required|unique:familias_profesionales,codigo',
+            'descripcion' => 'required',
+        ]);
 
-        $familiaProfesional = FamiliaProfesional::create($familiaProfesional);
+        $familiaProfesional = FamiliaProfesional::create($validate_Data);
 
         return new FamiliaProfesionalResource($familiaProfesional);
     }
@@ -44,8 +54,12 @@ class FamiliaProfesionalController extends Controller
      */
     public function update(Request $request, FamiliaProfesional $familiaProfesional)
     {
-        $familiaProfesionalData = json_decode($request->getContent(), true);
-        $familiaProfesional->update($familiaProfesionalData);
+        $validate_Data = $request->validate([
+            'nombre' => 'required',
+            'codigo' => 'required|unique:familias_profesionales,codigo',
+            'descripcion' => 'required',
+        ]);
+        $familiaProfesional->update($validate_Data);
 
         return new FamiliaProfesionalResource($familiaProfesional);
     }

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ModuloFormativo;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -12,17 +13,15 @@ class ModulosFormativosTableSeeder extends Seeder
      */
     public function run(): void
     {
-        // Desactivamos restricciones de llaves foráneas para poder truncar
+
         DB::table('modulos_formativos')->truncate();
 
-        // Obtenemos los ciclos para buscar el ID mediante el código (codCiclo)
-        // Asumimos que CiclosFormativosTableSeeder::$ciclos es accesible
+        ModuloFormativo::factory(10)->create();
+        
         $ciclos = CiclosFormativosTableSeeder::$ciclos;
         $codigosCiclos = array_column($ciclos, 'codCiclo');
 
         foreach (self::$modulos as $modulo) {
-            // Buscamos el índice en el array de ciclos y sumamos 1 para obtener el ID aproximado
-            // Nota: Esto asume que los IDs en la DB coinciden con el orden del array de ciclos.
             $cicloId = array_search($modulo['codCiclo'], $codigosCiclos) + 1;
 
             DB::table('modulos_formativos')->insert([
@@ -32,7 +31,7 @@ class ModulosFormativosTableSeeder extends Seeder
                 'horas_totales'  => $modulo['horas_totales'],
                 'curso_escolar'  => $modulo['curso_escolar'],
                 'centro'         => $modulo['centro'],
-                'docente_id'     => $modulo['docente_id'], // ID de la tabla resultados_aprendizaje según tu esquema
+                'docente_id'     => $modulo['docente_id'],
                 'descripcion'    => $modulo['descripcion']
             ]);
         }

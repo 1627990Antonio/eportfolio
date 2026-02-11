@@ -20,8 +20,8 @@ return new class extends Migration
             $table->integer('horas_totales');
             $table->string('curso_escolar');
             $table->string('centro');
-            $table->bigInteger('docente_id')->unsigned();
-            $table->foreign('docente_id')->references('id')->on('resultados_aprendizaje')->onDelete('cascade');
+            $table->bigInteger('docente_id')->unsigned()->nullable();
+            $table->foreign('docente_id')->references('id')->on('users')->onDelete('cascade');
             $table->text('descripcion');
             $table->timestamps();
         });
