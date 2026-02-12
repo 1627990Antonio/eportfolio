@@ -53,6 +53,10 @@ Route::prefix('v1')->group(function () {
     ]);
 
     // ------------------------------------------------
+    // MODULOS IMPARTIDOS   
+    Route::apiResource('modulos-impartidos', ModuloFormativoController::class);
+
+    // ------------------------------------------------
     // COMENTARIOS
     Route::apiResource('evidencias.comentarios', ComentariosController::class);
 

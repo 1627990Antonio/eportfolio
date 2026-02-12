@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\ResultadoAprendizaje;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use LDAP\Result;
 
 class ResultadosAprendizajeTableSeeder extends Seeder
 {
@@ -14,6 +15,8 @@ class ResultadosAprendizajeTableSeeder extends Seeder
     public function run(): void
     {
         ResultadoAprendizaje::truncate();
+
+        ResultadoAprendizaje::factory(10)->create();
         foreach (self::$resultados_aprendizaje as $resultado_aprendizaje) {
             ResultadoAprendizaje::insert([
                 'codigo' => $resultado_aprendizaje['codigo'],

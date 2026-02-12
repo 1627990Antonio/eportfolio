@@ -17,10 +17,10 @@ class CicloFormativoFactory extends Factory
     public function definition(): array
     {
         return [
-            'nombre'=>$this->faker->word(),
-            'codigo'=>$this->faker->unique()->word(),
-            'grado'=>$this->faker->randomElement(['básico', 'medio', 'superior']),
-            'descripcion'=>$this->faker->sentence(),
+            'nombre' => $this->faker->words(3, true),
+        'codigo' => $this->faker->unique()->regexify('[A-Z]{3}[0-9]{3}'),
+        'grado' => $this->faker->randomElement(['basico', 'medio', 'superior']),
+        'descripcion' => $this->faker->paragraph()
         ];
     }
 }

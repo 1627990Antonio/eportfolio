@@ -15,10 +15,16 @@ class CicloFormativoController extends Controller
      */
     public function index(Request $request, FamiliaProfesional $familiaProfesional)
     {
+        $query = CicloFormativo::query()->where('id', $request->id);
+        if ($query) {
+            $query->orWhere('nombre', 'like', '%' . $request->search . '%');
+        }
+
         return CicloFormativoResource::collection(
-            CicloFormativo::where('familia_profesional_id', $familiaProfesional->id)
-            ->orderBy($request->sort ?? 'id', $request->order ?? 'asc')
-            ->paginate($request->per_page));
+            $query->where('familia_profesional_id', $familiaProfesional->id)
+                ->orderBy($request->sort ?? 'id', $request->order ?? 'asc')
+                ->paginate($request->per_page)
+        );
     }
 
     /**
@@ -26,12 +32,21 @@ class CicloFormativoController extends Controller
      */
     public function store(Request $request, FamiliaProfesional $familiaProfesional)
     {
-        $cicloFormativoDato = json_decode($request->getContent(), true);
-        $cicloFormativoDato['familia_profesional_id'] = $familiaProfesional->id;
+        if ($request->user()->email !== config('app.admin.email')) {
+            return response()->json(['message' => 'No tienes permiso para crear un ciclo formativo'], 403);
+        }
+            $validate_Data = $request->validate([
+                'nombre' => 'required',
+                'codigo' => 'required|unique:ciclos_formativos,codigo',
+                'grado' => 'required|in:basico,medio,superior',
+                'descripcion' => 'required',
+            ]);
 
-        $cicloFormativo = CicloFormativo::create($cicloFormativoDato);
+            $validate_Data['familia_profesional_id'] = $familiaProfesional->id;
 
-        return new CicloFormativoResource($cicloFormativo);
+            $cicloFormativo = CicloFormativo::create($validate_Data);
+
+            return new CicloFormativoResource($cicloFormativo);
     }
 
     /**
@@ -48,9 +63,17 @@ class CicloFormativoController extends Controller
      */
     public function update(Request $request, FamiliaProfesional $familiaProfesional, CicloFormativo $cicloFormativo)
     {
+        if ($request->user()->email !== config('app.admin.email')) {
+            return response()->json(['message' => 'No tienes permiso para crear un ciclo formativo'], 403);
+        }
         abort_if($cicloFormativo->familia_profesional_id !== $familiaProfesional->id, 404);
-        $cicloFormativoDato = json_decode($request->getContent(), true);
-        $cicloFormativo->update($cicloFormativoDato);
+        $validate_Data = $request->validate([
+            'nombre' => 'required',
+            'codigo' => 'required|unique:ciclos_formativos,codigo',
+            'grado' => 'required|in:basico,medio,superior',
+            'descripcion' => 'required',
+        ]);
+        $cicloFormativo->update($validate_Data);
 
         return new CicloFormativoResource($cicloFormativo);
     }
@@ -58,12 +81,18 @@ class CicloFormativoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(FamiliaProfesional $familiaProfesional, CicloFormativo $cicloFormativo)
+    public function destroy(Request $request, FamiliaProfesional $familiaProfesional, CicloFormativo $cicloFormativo)
     {
+        if ($request->user()->email !== config('app.admin.email')) {
+            return response()->json(['message' => 'No tienes permiso para crear un ciclo formativo'], 403);
+        }
         abort_if($cicloFormativo->familia_profesional_id !== $familiaProfesional->id, 404);
         try {
             $cicloFormativo->delete();
-            return response()->json(null, 204);
+            return response()->json(
+                ['message' => 'CicloFormativo eliminado correctamente'],
+                200
+            );
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Error: ' . $e->getMessage()

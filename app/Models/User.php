@@ -13,6 +13,9 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasApiTokens, HasFactory, Notifiable;
 
+    public function ModulosFormativos(){
+        return $this->hasMany(ModuloFormativo::class, 'docente_id');
+    }
     /**
      * The attributes that are mass assignable.
      *

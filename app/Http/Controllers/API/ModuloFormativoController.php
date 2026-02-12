@@ -15,12 +15,12 @@ class ModuloFormativoController extends Controller
      */
     public function index(Request $request, CicloFormativo $cicloFormativo)
     {
-        // $query = ModuloFormativo::query()->where('ciclo_formativo_id', $cicloFormativo->id);
-        // if($query){
-        //     $query->orWhere('nombre', 'like', '%' . $request->search . '%');
-        // }
+        $query = ModuloFormativo::query()->where('id', $request->id);
+         if($query){
+             $query->orWhere('nombre', 'like', '%' . $request->search . '%');
+        }
         return ModuloFormativoResource::collection(
-            ModuloFormativo::where('ciclo_formativo_id', $cicloFormativo->id)
+            $query->where('ciclo_formativo_id', $cicloFormativo->id)
             ->orderBy($request->sort ?? 'id', $request->order ?? 'asc')
             ->paginate($request->per_page));
     }
@@ -38,6 +38,7 @@ class ModuloFormativoController extends Controller
             'centro' => 'required|string',
             'descripcion' => 'required',
         ]);
+        $validate_Data['docente_id'] = $request->user()->id;
         $validate_Data['ciclo_formativo_id'] = $cicloFormativo->id;
 
         $moduloFormativo = ModuloFormativo::create($validate_Data);
